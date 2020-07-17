@@ -115,11 +115,13 @@ void loop() {
     // Decode key
     // Detect key row
     row = 0*!digitalRead(ROW0_PIN) + 1*!digitalRead(ROW1_PIN) + 2*!digitalRead(ROW2_PIN) + 3*!digitalRead(ROW3_PIN);
+    // 0*!digitalRead(ROW0_PIN) can be replace with 0
     // This implementation inverts rows
     // row = 0*digitalRead(ROW0_PIN) + digitalRead(ROW1_PIN) + 2*digitalRead(ROW2_PIN) + 3*digitalRead(ROW3_PIN) - 3;
     // If multiple keys are pressed row could be grater than 3, the code below prevent this situation
-    if(row > 3) {
+    if(row >= ROWS) {
       row = 0;
+      // Or you can handle this case in a different way
       }
     // Detect key column
     detectColumn:
@@ -143,12 +145,14 @@ void loop() {
               // If multiple keys are pressed the code below prevent infinite loop
               timeOUT++;
               if(timeOUT == 50) {
+                timeOUT = 0;
                 goto loop;
                 }
               goto detectColumn;
               }
           }
     }
+    // The two goto instructions could be replaced with for loops
     digitalWrite(COLUMN0_PIN, LOW);
     digitalWrite(COLUMN1_PIN, LOW);
     digitalWrite(COLUMN2_PIN, LOW);
